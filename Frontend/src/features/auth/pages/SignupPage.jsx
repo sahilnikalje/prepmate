@@ -12,7 +12,7 @@ function SignupPage() {
       <AuthLayout/>
 
       {/*//* right panel */}
-      <section className='flex flex-col w-full md:w-1/2 p-8 md:p-12 lg:p-20 items-center justify-center bg-surface'>
+      <section className='flex flex-col w-full md:w-1/2 p-6 md:p-10 items-center justify-center bg-surface overflow-y-auto'>
        
         {/*//* Mobile logo — hidden on md and above */}
         <div className='md:hidden flex items-center gap-2 mb-12 self-start'>
@@ -30,7 +30,7 @@ function SignupPage() {
         </div>
 
         <div className='w-full max-w-md'>
-           <header className='mb-10'>
+           <header className='mb-6'>
              <h2 className="text-3xl font-extrabold font-headline text-on-surface mb-2">
                Create your account
              </h2>
@@ -41,7 +41,7 @@ function SignupPage() {
 
            <SignupForm/>
 
-           <footer className='mt-10 text-center'>
+           <footer className='mt-6 text-center'>
              <p className='text-on-surface-variant'>
                Already have an account?{' '}
                <button

@@ -12,8 +12,8 @@ function LoginPage() {
       {/*//* left panel */}
       <AuthLayout/>
 
-      {/*//* right panel */}
-      <section className="w-full md:w-1/2 bg-surface-container-low flex items-center justify-center p-8 md:p-16">
+      {/*//* right panel */}w-full md:w-1/2 bg
+      <section className="w-full md:w-1/2 bg-surface-container-low flex items-center justify-center p-6 md:p-10 overflow-y-auto">
         <div className='w-full max-w-md'>
            {/*//* Mobile logo */}
           <div className="md:hidden mb-12 text-center">
@@ -21,9 +21,8 @@ function LoginPage() {
               PrepMate AI
             </span>
           </div>
-        </div>
 
-          <div className="mb-10">
+          <div className="mb-6">
             <h2 className="font-headline text-4xl font-extrabold text-on-surface mb-2">
               Welcome Back
             </h2>
@@ -34,7 +33,7 @@ function LoginPage() {
 
           <LoginForm/>
 
-          <div className="mt-10 text-center">
+          <div className="mt-6 text-center">
             <p className="text-on-surface-variant font-medium">
               Don't have an account?{" "}
               <button
@@ -45,6 +44,7 @@ function LoginPage() {
               </button>
             </p>
           </div>    
+        </div>
       </section>
     </main>
   )

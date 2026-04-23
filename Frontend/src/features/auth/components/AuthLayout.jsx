@@ -1,5 +1,5 @@
 import React from 'react'
-
+import logo from '../../../assets/logo.png'
 //todo STEP-1: Define feature cards as an array
 //todo So we can loop instead of writing the same card 3 times
 
@@ -43,7 +43,7 @@ function AuthLayout() {
       <div className='relative z-10 flex flex-col h-full'>
 
         {/*//! logo */}
-        <div className='flex items-center gap-2 mb-12'>
+        {/* <div className='flex items-center gap-2 mb-12'>
            <div className='w-10 h-10 bg-radient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20'>
              <span className='material-symbols-outlined text-white text-xl'
                    style={{fontVariationSettings:"'FILL'1"}}
@@ -54,7 +54,11 @@ function AuthLayout() {
              <span className="text-2xl font-bold font-headline bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               PrepMate AI
              </span>
-        </div>
+        </div> */}
+
+<div className='flex items-center gap-3 mb-12'>
+  <img src={logo} alt="PrepMate Logo" className="w-40 object-contain" />
+</div>
 
         {/*//! Headline */}
         <div className='max-w-xl mb-12'>

@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+//todo  STEP-1: Import authService — replaces the dummy console.log
+import authService from '../services/authService'
+
 function LoginForm() {
   const navigate=useNavigate()
 
@@ -8,16 +11,40 @@ function LoginForm() {
   const[password, setPassword]=useState('')
   const[showPassword, setShowPassword]=useState(false)
 
-  const handleSubmit=(e)=>{
-    e.preventDefault()
+  //todo STEP-2: Add loading and error states
+  const[loading, setLoading]=useState(false)
+  const[error, setError]=useState('')
 
+//todo STEP-3: Update handleSubmit to call the real API
+  const handleSubmit=async (e)=>{
+    e.preventDefault()
+    setError('')      //todo clear previous errors
+    setLoading(true) //todo disable button while request is in flight
+
+    try{
+      await authService.login(email, password)
+      navigate('/dashboard')
+    }
+    catch(err){
+      setError(err.response?.data?.message || "Something went wrong")
+    }
+    finally{
+      setLoading(false)
+    }
     //! Dummy — will call POST /api/auth/login in Integration step
-    console.log('LOGIN DUMMY: ', {email, password})
+    // console.log('LOGIN DUMMY: ', {email, password})
   }
   const inputClass="w-full h-14 pl-12 pr-4 bg-surface-container-highest border-none rounded-xl text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/50 transition-all outline-none"
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-6'>
+    <form onSubmit={handleSubmit} className='space-y-4'>
+
+      {error && (
+        <div className='w-full p-3 rounded-xl bg-error/10 border border-error/30 text-error text-sm text-center'>
+          {error}
+        </div>
+      )}
+
        {/*//* email */}
       <div className="space-y-2">
         <label className="text-sm font-semibold text-on-surface ml-1">Email Address</label>
@@ -71,9 +98,10 @@ function LoginForm() {
       {/*//* submit */}
       <button
        type='submit'
+       disabled={loading}
        className="w-full py-4 bg-gradient-to-r from-primary to-secondary text-on-primary font-bold text-lg rounded-xl shadow-[0_0_20px_rgba(163,166,255,0.3)] hover:shadow-[0_0_30px_rgba(163,166,255,0.4)] hover:scale-[1.01] active:scale-[0.99] transition-all"
       >
-        Sign In to Account
+       {loading ? "Signing in..." : "Sign In to Account"}
       </button>
 
       {/*//* or divider */}
