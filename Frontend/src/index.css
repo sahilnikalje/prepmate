@@ -1,0 +1,28 @@
+@import "@fontsource/inter";
+@import "@fontsource/plus-jakarta-sans";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* STEP-3: Set the default font for everything on the page */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #060e20;
+}
+
+/* STEP-4: Utility class for the dotted grid background on the left panel */
+/* We use radial-gradient to draw tiny dots in a grid pattern */
+.dotted-grid {
+  background-image: radial-gradient(circle, #40485d 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* STEP-5: Glassmorphism utility class */
+/* backdrop-blur creates the frosted glass look */
+/* We'll reuse this on feature cards */
+.glass-card {
+  background: rgba(25, 37, 64, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
