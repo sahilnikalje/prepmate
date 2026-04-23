@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import authService from '../services/authService';
 
 function SignupForm() {
   const navigate=useNavigate()
@@ -10,21 +11,43 @@ function SignupForm() {
   const[confirmPassword, setConfirmPassword]=useState('')
   const[showPassword, setShowPassword]=useState(false)
   const[showConfirmPassword, setShowConfirmPassword]=useState(false)
+  const[loading, setLoading]=useState(false)
+  const[error, setError]=useState('')
 
-  const handleSubmit=(e)=>{
+
+  const handleSubmit=async(e)=>{
     e.preventDefault()
+    setError('')
+
     if(password!==confirmPassword){
       alert('Password do not match')
       return
     }
+    setLoading(true)
+
+    try{
+      await authService.register(name, email, password)
+      navigate('/login')
+    }
+    catch(err){
+      setError(err.response?.data?.message || 'Something went wrong')
+    }
+    finally{
+      setLoading(false)
+    }
      //! Dummy — will be replaced with real API call in Integration step
-    console.log('SIGNUP DUMMY', {name, email, password})
-    navigate('/login')
+    // console.log('SIGNUP DUMMY', {name, email, password})
+    // navigate('/login')
   }
 
   const inputClass='w-full h-14 pl-12 pr-4 bg-surface-container-highest border-none rounded-xl text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/50 transition-all duration-300 outline-none'
   return (
-    <form onSubmit={handleSubmit} className='space-y-5'>
+    <form onSubmit={handleSubmit} className='space-y-3'>
+      {error && (
+        <div className='w-full p-3 rounded-xl bg-error/10 border border-error/30 text-error text-sm text-center'>
+          {error}
+        </div>
+      )}
       {/*//* full name */}
        <div className='space-y-2'>
            <label className='text-sm font-semibold text-on-surface-variant px-1'>
@@ -111,7 +134,7 @@ function SignupForm() {
            onClick={()=>setShowConfirmPassword(!showConfirmPassword)}
            className='absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors'
           >
-             <span>
+             <span className='material-symbols-outlined'>
                {showConfirmPassword ? 'visibility' : 'visibility_off'}
              </span>
           </button>
@@ -121,9 +144,10 @@ function SignupForm() {
        {/*//* submit */}
        <button
         type='submit'
+        disabled={loading}
         className="w-full h-14 bg-gradient-to-r from-primary to-secondary text-on-primary-fixed font-bold text-lg rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 active:scale-[0.98] transition-all duration-300 mt-4"
        >
-        Signup
+        {loading ? "Creating account..." : "Signup"}
        </button>
 
        {/*//* or divider */}
