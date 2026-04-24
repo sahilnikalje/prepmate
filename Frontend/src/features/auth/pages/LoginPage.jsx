@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import AuthLayout from '../components/AuthLayout'
+import AuthLayout from '../layout/AuthLayout'
 import LoginForm from './../components/LoginForm';
 
 function LoginPage() {
