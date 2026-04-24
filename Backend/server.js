@@ -4,6 +4,7 @@ const cors=require('cors')
 const cookieParser=require('cookie-parser')
 const connectDB=require('./config/db')
 const authRouter = require('./features/auth/auth.routes')
+const dashboardRouter=require('./features/dashboard/dashboard.routes')
 
 const app=express()
 
@@ -15,6 +16,7 @@ app.use(cors({
 }))
 
 app.use('/api/auth', authRouter)
+app.use('/api/dashboard', dashboardRouter)
 
 const PORT=process.env.PORT
 const startServer=async()=>{
