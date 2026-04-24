@@ -2,13 +2,28 @@ import React, { Children } from 'react'
 import {useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
+import authService from '../../auth/services/authService';
 
 function DashboardLayout({children}) {
-    const navigate=useNavigate
-  return (
+    const navigate=useNavigate()
+    
+ //todo STEP-1: Real logout — calls backend to clear the cookie
+   const handleLogout=async()=>{
+    try{
+      await authService.logout()
+    }
+    catch(err){
+      console.error('Logout error: ', err);
+    }
+    finally{
+ //todo STEP-2: Always redirect to login even if API fails
+    navigate('/login')
+    }
+   }
+  return ( 
     <div className='bg-background text-on-surface min-h-screen flex overflow-hidden'>
-        {/* Sidebar — fixed on left */}
-        <Sidebar/>
+        {/*//* Sidebar — fixed on left */}
+        <Sidebar onLogout={handleLogout}/>
 
         {/*//* Main area — offset by sidebar width on md+ */}
          <main className='flex-1 ml-0 md:ml-64 h-screen overflow-y-auto scroll-smooth'>
@@ -21,7 +36,7 @@ function DashboardLayout({children}) {
             </div>
 
             {/*//* Mobile bottom padding so content isn't hidden behind mobile nav */}
-            <footer/>
+            <footer className='h-24 md:hidden'/>
          </main>
 
          {/*//* Mobile bottom nav bar */}
