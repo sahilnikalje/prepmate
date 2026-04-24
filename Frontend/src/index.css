@@ -26,3 +26,9 @@ body {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }
+.glass-panel {
+  background: rgba(25, 37, 64, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(163, 166, 255, 0.1);
+}
