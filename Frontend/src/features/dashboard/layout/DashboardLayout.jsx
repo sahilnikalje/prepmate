@@ -1,7 +1,7 @@
 import React, { Children } from 'react'
 import {useNavigate } from 'react-router-dom';
-import Sidebar from './Sidebar';
-import Navbar from './Navbar';
+import Sidebar from '../components/Sidebar';
+import Navbar from '../components/Navbar';
 import authService from '../../auth/services/authService';
 
 function DashboardLayout({children}) {

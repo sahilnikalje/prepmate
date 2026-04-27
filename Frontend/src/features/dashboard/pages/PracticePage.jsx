@@ -1,4 +1,4 @@
-import DashboardLayout from "../components/DashboardLayout"
+import DashboardLayout from "../layout/DashboardLayout"
 
 export default function PracticePage() {
   return (

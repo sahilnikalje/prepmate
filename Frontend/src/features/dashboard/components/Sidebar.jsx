@@ -28,7 +28,7 @@ function Sidebar({onLogout}) {
             <img src={logo} alt="PrepMate Logo" className="w-40 object-contain" />
           </div>
 
-            <p className='text-[10px] uppercase tracking-widest text-on-surface-variant mt-1'>
+            <p className='text-xs uppercase tracking-wider text-on-surface-variant mt-1'>
                 AI Interview Prep
             </p>
         </div>
