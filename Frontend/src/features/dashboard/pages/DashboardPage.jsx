@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { dummyInterviews, dummyStats, dummyUser } from '../data/dummyData';
 import StatsCard from '../components/StatsCard';
 import InterviewList from '../components/InterviewList';
-import DashboardLayout from '../components/DashboardLayout';
 import dashboardService from '../services/dashboardService';
+import DashboardLayout from '../layout/DashboardLayout';
 
 //todo STEP-1: Define the stats card config
 //todo We merge this with real API data to keep icons/colors intact
