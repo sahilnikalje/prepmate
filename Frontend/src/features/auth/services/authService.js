@@ -16,12 +16,12 @@ const login=async(email, password)=>{
 }
 
 const logout=async()=>{
-    const response=await api.post('/auth/logout')
+    const response=await api.post('/api/auth/logout')
     return response.data
 }
 
 const getMe=async()=>{
-    const response=await api.get('/auth/me')
+    const response=await api.get('/api/auth/me')
     return response.data
 }
 
