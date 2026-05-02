@@ -6,6 +6,7 @@ import DashboardPage from './features/dashboard/pages/DashboardPage';
 import PracticePage from './features/practice/pages/PracticePage';
 import AnalyticsPage from './features/dashboard/pages/AnalyticsPage';
 import ResourcesPage from './features/dashboard/pages/ResourcesPage';
+import InterviewPage from './features/interview/pages/InterviewPage';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
           <Route path="/practice"   element={<PracticePage/>} />
           <Route path="/analytics"  element={<AnalyticsPage/>} />
           <Route path="/resources"  element={<ResourcesPage/>} />
-          <Route path='/interview/:id' element={<div className='text-white p-10'>Interview Room Coming next</div>}/>
+          <Route path='/interview/:id' element={<InterviewPage/>}/>
        </Routes>
     </BrowserRouter>
   )
