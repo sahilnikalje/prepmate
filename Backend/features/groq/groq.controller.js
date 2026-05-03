@@ -20,22 +20,39 @@ const generateQuestions=async(req,res)=>{
 
      //todo STEP-4: Build the prompt for Groq
      //todo We give it the role, JD so it generates relevant questions
-       const prompt=`
-          You are an expert technical interviewer.
-          Generate exactly 5 interview questions for the following role and job description.
-          Role:${interview.role}
-          Category: ${interview.category}
-          Industry: ${interview.industry}
-          Job Description: ${interview.jobDescription || "Not provided"}
+    //    const prompt=`
+    //       You are an expert technical interviewer.
+    //       Generate exactly 5 interview questions for the following role and job description.
+    //       Role:${interview.role}
+    //       Category: ${interview.category}
+    //       Industry: ${interview.industry}
+    //       Job Description: ${interview.jobDescription || "Not provided"}
 
-          Rules:
-            - Mix behavioral and technical questions
-            - Keep questions concise and clear
-            - Make them relevant to the role and JD
-            - Return ONLY a JSON array of 5 strings, nothing else
-            - Example: ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"]
-          `.trim()
+    //       Rules:
+    //         - Mix behavioral and technical questions
+    //         - Keep questions concise and clear
+    //         - Make them relevant to the role and JD
+    //         - Return ONLY a JSON array of 5 strings, nothing else
+    //         - Example: ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"]
+    //       `.trim()
+const prompt=`
+  You are an expert technical interviewer conducting a real job interview.
+  Generate exactly 5 interview questions based STRICTLY on the job description below.
 
+  Role: ${interview.role}
+  Category: ${interview.category}
+  Industry: ${interview.industry}
+  Job Description: ${interview.jobDescription || "Not provided"}
+
+  Rules:
+  - Questions must be directly based on the job description above
+  - Mix technical and behavioral questions relevant to this specific role
+  - Ask about real skills, tools, and scenarios mentioned in the JD
+  - Do NOT ask generic questions
+  - Keep questions concise and conversational
+  - Return ONLY a JSON array of 5 strings, nothing else
+  - Example: ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"]
+`.trim()
      //todo STEP-5: Call Groq API
         const completion=await groq.chat.completions.create({
             model:"llama-3.3-70b-versatile",
