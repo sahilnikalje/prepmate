@@ -4,7 +4,7 @@ import LoginPage from './features/auth/pages/LoginPage';
 import SignupPage from './features/auth/pages/SignupPage';
 import DashboardPage from './features/dashboard/pages/DashboardPage';
 import PracticePage from './features/practice/pages/PracticePage';
-import AnalyticsPage from './features/dashboard/pages/AnalyticsPage';
+import AnalyticsPage from './features/analytics/pages/AnalyticsPage';
 import ResourcesPage from './features/dashboard/pages/ResourcesPage';
 import InterviewPage from './features/interview/pages/InterviewPage';
 import ProtectedRoute from './features/auth/components/ProtectedRoute';
