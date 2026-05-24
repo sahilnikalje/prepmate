@@ -4,11 +4,13 @@ const cors=require('cors')
 const cookieParser=require('cookie-parser')
 const path=require('path')
 const connectDB=require('./config/db')
+
 const authRouter = require('./features/auth/auth.routes')
 const dashboardRouter=require('./features/dashboard/dashboard.routes')
 const interviewRouter=require('./features/interview/interview.routes')
 const groqRouter=require('./features/groq/groq.routes')
 const analyticsRouter=require('./features/analytics/analytics.routes')
+const resourceRouter=require('./features/resources/resources.routes')
 
 const app=express()
 
@@ -25,6 +27,7 @@ app.use('/api/dashboard', dashboardRouter)
 app.use('/api/interview', interviewRouter)
 app.use('/api/groq', groqRouter)
 app.use('/api/analytics', analyticsRouter)
+app.use('/api/resources', resourceRouter)
 
 const PORT=process.env.PORT
 const startServer=async()=>{
