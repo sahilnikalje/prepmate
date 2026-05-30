@@ -1,7 +1,7 @@
 import React from 'react'
 
 function StrengthCard({strength}) {
-    const isLarge=StrengthCard.size==='large'
+    const isLarge=strength.size==='large'
   return (
     <div className={`relative overflow-hidden rounded-3xl bg-surface-container-high
       border border-white/5 hover:border-primary/20 transition-all duration-300
@@ -36,7 +36,7 @@ function StrengthCard({strength}) {
                     {strength.desc}
                 </p>
              )}
-             {isLarge && (
+             {!isLarge && (
                 <p className='text-on-surface-variant text-xs mt-2 leading-relaxed'>
                     {strength.desc}
                 </p>

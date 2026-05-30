@@ -8,6 +8,7 @@ import AnalyticsPage from './features/analytics/pages/AnalyticsPage';
 import ResourcesPage from './features/resources/pages/ResourcesPage';
 import InterviewPage from './features/interview/pages/InterviewPage';
 import ProtectedRoute from './features/auth/components/ProtectedRoute';
+import SettingsPage from './features/settings/pages/SettingsPage'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/analytics"  element={<ProtectedRoute><AnalyticsPage/></ProtectedRoute>} />
           <Route path="/resources"  element={<ProtectedRoute><ResourcesPage/></ProtectedRoute>} />
           <Route path='/interview/:id' element={<ProtectedRoute><InterviewPage/></ProtectedRoute>}/>
+          <Route path="/settings" element={<ProtectedRoute><SettingsPage/></ProtectedRoute>}/>
        </Routes>
     </BrowserRouter>
   )
