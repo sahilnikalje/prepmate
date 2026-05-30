@@ -3,14 +3,16 @@ import {useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import authService from '../../auth/services/authService';
+import { useUser } from '../../../context/UserContext'
 
 function DashboardLayout({children}) {
     const navigate=useNavigate()
-    
+    const { clearUser } = useUser()
  //todo STEP-1: Real logout — calls backend to clear the cookie
    const handleLogout=async()=>{
     try{
       await authService.logout()
+      clearUser()
     }
     catch(err){
       console.error('Logout error: ', err);

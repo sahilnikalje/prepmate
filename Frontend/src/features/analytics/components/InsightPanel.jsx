@@ -30,7 +30,7 @@ function InsightPanel({insight}) {
           <p className="text-on-surface text-sm leading-relaxed">
             Your technical skills are strong, but{" "}
             <span className="text-primary font-semibold">
-              {InsightPanel.priority} need improvement
+              {insight.priority} needs improvement
             </span>{" "}
             to reach senior level. Focus on empathy-driven storytelling in your
             next session.

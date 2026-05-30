@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { dummyInterviews, dummyStats, dummyUser } from '../data/dummyData';
 import StatsCard from '../components/StatsCard';
 import InterviewList from '../components/InterviewList';
 import dashboardService from '../services/dashboardService';
 import DashboardLayout from '../layout/DashboardLayout';
+import { useUser } from '../../../context/UserContext';
 
 //todo STEP-1: Define the stats card config
 //todo We merge this with real API data to keep icons/colors intact
@@ -47,6 +47,7 @@ const statsConfig = [
 
 function DashboardPage() {
  //todo STEP-2: State for real data, loading, and error
+    const { user } = useUser()
     const[stats, setStats]=useState(null)
     const[recentInterviews, setRecentInterviews]=useState([])
     const[loading, setLoading]=useState(true)
@@ -81,21 +82,29 @@ function DashboardPage() {
       { icon: "leaderboard",iconColor: "text-[#48e5d0]",   scoreColor: "text-[#48e5d0]",   hoverBg: "hover:bg-[#48e5d0]/20",  hoverText: "hover:text-[#48e5d0]"   },
     ]
 
-    const mappedInterviews=recentInterviews.map((iv, i)=>({
-        id:iv.id,
-        title:iv.title,
-        company:iv.company,
-        score:`${iv.score}%`,
-        date: new Date(iv.date).toLocaleDateString("en-IN", {day:'numeric', month:'short', year:'numeric'}),
-        ...iconMap[i % iconMap.length],
-    }))
+    const mappedInterviews=recentInterviews.map((iv, i)=>{
+        //* Safely parse date — avoid "Invalid Date"
+        const rawDate = iv.date || iv.createdAt
+        const parsed = rawDate ? new Date(rawDate) : null
+        const dateStr = parsed && !isNaN(parsed.getTime())
+            ? parsed.toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' })
+            : 'N/A'
+        return {
+            id: iv.id,
+            title: iv.title || iv.role || 'Interview',
+            company: iv.company || iv.industry || 'General',
+            score: `${iv.score ?? 0}%`,
+            date: dateStr,
+            ...iconMap[i % iconMap.length],
+        }
+    })
   return (
     <DashboardLayout>
     {/*//* Welcome section */}
     <section className='mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8'>
         <div className='space-y-2'>
             <h2 className='text-4xl md:text-5xl font-extrabold font-headline tracking-tight text-on-surface'>
-                Welcome back, {dummyUser.name}
+                Welcome back, {user?.name || 'there'}
             </h2>
             <p className='text-on-surface-variant text-lg'>
                 Ready to elevate your interview performance today?
