@@ -5,38 +5,142 @@
 @tailwind components;
 @tailwind utilities;
 
-/* STEP-3: Set the default font for everything on the page */
-body {
-  font-family: "Inter", sans-serif;
-  background-color: #060e20;
+/* ─── DARK THEME (default) ─────────────────────────── */
+:root,
+[data-theme="dark"] {
+  --c-bg:               6   14  32;   /* #060e20 */
+  --c-surface:          6   14  32;   /* #060e20 */
+  --c-surface-low:      9   19  40;   /* #091328 */
+  --c-surface-high:     20  31  56;   /* #141f38 */
+  --c-surface-highest:  28  42  71;   /* #1c2a47 */
+  --c-surface-variant:  30  45  77;   /* #1e2d4d */
+  --c-surface-bright:   36  51  86;   /* #243356 */
+
+  --c-primary:          163 166 255;  /* #a3a6ff */
+  --c-secondary:        193 128 255;  /* #c180ff */
+  --c-on-primary:       255 255 255;
+  --c-on-primary-fixed: 255 255 255;
+
+  --c-on-surface:         232 234 246; /* #e8eaf6 */
+  --c-on-surface-variant: 163 170 196; /* #a3aac4 */
+  --c-outline-variant:    61  74  107; /* #3d4a6b */
+  --c-outline:            92  101 132; /* #5c6584 */
+
+  --c-error:              242 139 130; /* #f28b82 */
+  --c-error-container:    140 29  24;  /* #8c1d18 */
+  --c-tertiary-dim:       72  229 208; /* #48e5d0 */
+
+  /* Glass panels */
+  --glass-bg:      rgba(25, 37, 64, 0.4);
+  --glass-border:  rgba(163, 166, 255, 0.1);
+
+  /* Body */
+  --body-bg: #060e20;
+  --body-color: #e8eaf6;
 }
 
-/* STEP-4: Utility class for the dotted grid background on the left panel */
-/* We use radial-gradient to draw tiny dots in a grid pattern */
+/* ─── LIGHT THEME ───────────────────────────────────── */
+[data-theme="light"] {
+  --c-bg:               240 244 255;  /* #f0f4ff */
+  --c-surface:          240 244 255;  /* #f0f4ff */
+  --c-surface-low:      228 234 250;  /* #e4eafa */
+  --c-surface-high:     210 218 242;  /* #d2daf2 */
+  --c-surface-highest:  196 206 236;  /* #c4ceed */
+  --c-surface-variant:  220 228 248;  /* #dce4f8 */
+  --c-surface-bright:   255 255 255;  /* #ffffff */
+
+  /* Darker primaries so they're visible on light bg */
+  --c-primary:          79  82  204;  /* #4f52cc */
+  --c-secondary:        139 53  204;  /* #8b35cc */
+  --c-on-primary:       255 255 255;
+  --c-on-primary-fixed: 255 255 255;
+
+  --c-on-surface:         26  31  54;  /* #1a1f36 */
+  --c-on-surface-variant: 74  80  112; /* #4a5070 */
+  --c-outline-variant:    180 190 220; /* #b4bedd */
+  --c-outline:            130 138 172; /* #828aac */
+
+  --c-error:              176 0   32;  /* #b00020 */
+  --c-error-container:    255 218 218; /* #ffdada */
+  --c-tertiary-dim:       0   121 107; /* #00796b */
+
+  /* Glass panels — white frosted look */
+  --glass-bg:     rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(79, 82, 204, 0.15);
+
+  /* Body */
+  --body-bg:    #f0f4ff;
+  --body-color: #1a1f36;
+}
+
+/* ─── BASE ──────────────────────────────────────────── */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--body-bg);
+  color: var(--body-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ─── GLASSMORPHISM ─────────────────────────────────── */
+/* Both themes use CSS variables so glass reacts to theme */
+.glass-card {
+  background:         var(--glass-bg);
+  backdrop-filter:    blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  transition: background 0.3s ease;
+}
+
+.glass-panel {
+  background:         var(--glass-bg);
+  backdrop-filter:    blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border:             1px solid var(--glass-border);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* ─── DOTTED GRID ───────────────────────────────────── */
 .dotted-grid {
   background-image: radial-gradient(circle, #40485d 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
-/* STEP-5: Glassmorphism utility class */
-/* backdrop-blur creates the frosted glass look */
-/* We'll reuse this on feature cards */
-.glass-card {
-  background: rgba(25, 37, 64, 0.4);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-}
-.glass-panel {
-  background: rgba(25, 37, 64, 0.4);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(163, 166, 255, 0.1);
+/* Light theme dotted grid — darker dots on light bg */
+[data-theme="light"] .dotted-grid {
+  background-image: radial-gradient(circle, #a0a8c8 1px, transparent 1px);
 }
 
-/* add these below existing classes */
+/* ─── GLOW EFFECTS ──────────────────────────────────── */
 .mic-glow {
-  box-shadow: 0 0 30px rgba(163, 166, 255, 0.4);
+  box-shadow: 0 0 30px rgba(var(--c-primary) / 0.4);
 }
+
 .inner-glow {
-  box-shadow: inset 0 0 1px 1px rgba(163, 166, 255, 0.2);
+  box-shadow: inset 0 0 1px 1px rgba(var(--c-primary) / 0.2);
+}
+
+/* ─── SCROLLBAR ─────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--c-primary) / 0.3);
+  border-radius: 999px;
+}
+
+/* ─── SMOOTH THEME TRANSITION ───────────────────────── */
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
+}
+
+/* Exclude transitions on elements that shouldn't animate */
+svg,
+video,
+canvas,
+img {
+  transition: none;
 }

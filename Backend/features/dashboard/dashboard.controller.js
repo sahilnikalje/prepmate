@@ -24,10 +24,10 @@ const getDashboardData=async(req,res)=>{
         const recentInterviews=interviews.slice(0,3).map((iv)=>(
             {
                 id:iv._id,
-                title:iv.title,
-                company:iv.company,
+                title:iv.role,
+                company:iv.industry || iv.category || 'General',
                 score:iv.score,
-                data:iv.createdAt
+                date:iv.createdAt
             }
         ))
 

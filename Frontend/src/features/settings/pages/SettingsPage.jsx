@@ -7,7 +7,6 @@ import DangerZone        from '../components/DangerZone'
 import settingsService   from '../services/settingsService'
 
 export default function SettingsPage() {
-  //todo STEP-1: Settings state
   const [voice,    setVoice]    = useState('female')
   const [theme,    setTheme]    = useState('dark')
   const [autoSave, setAutoSave] = useState(true)
@@ -16,13 +15,13 @@ export default function SettingsPage() {
   const [success,  setSuccess]  = useState('')
   const [error,    setError]    = useState('')
 
-  //todo STEP-2: Load saved settings on mount
+  //todo STEP-1: Load saved settings from backend on mount
   useEffect(() => {
     const fetchSettings = async () => {
       try {
         const data = await settingsService.getSettings()
-        setVoice(data.settings?.voicePreference || 'female')
-        setTheme(data.settings?.theme           || 'dark')
+        setVoice(data.settings?.voicePreference ?? 'female')
+        setTheme(data.settings?.theme           ?? 'dark')
         setAutoSave(data.settings?.autoSave     ?? true)
       } catch (err) {
         console.error('Failed to load settings:', err)
@@ -33,8 +32,15 @@ export default function SettingsPage() {
     fetchSettings()
   }, [])
 
-  //todo STEP-3: Save preferences
+  //todo STEP-2: Apply theme to document root
+  //* So theme works across whole app
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
+
+  //todo STEP-3: Save preferences to backend
   const handleSavePreferences = async () => {
+    if (saving) return  // prevent double click
     setSaving(true)
     setSuccess('')
     setError('')
@@ -43,7 +49,7 @@ export default function SettingsPage() {
       setSuccess('Preferences saved successfully!')
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      setError('Failed to save preferences')
+      setError(err.response?.data?.message || 'Failed to save preferences')
     } finally {
       setSaving(false)
     }
@@ -58,7 +64,7 @@ export default function SettingsPage() {
 
       <div className="relative z-10 space-y-8 pb-12">
 
-        {/*//* STEP-4: Header */}
+        {/*//* Header */}
         <header>
           <h1 className="font-headline text-4xl lg:text-5xl font-extrabold text-on-surface tracking-tight">
             Settings
@@ -68,7 +74,7 @@ export default function SettingsPage() {
           </p>
         </header>
 
-        {/*//* STEP-5: Loading */}
+        {/*//* Loading */}
         {loading && (
           <div className="flex items-center justify-center py-20">
             <svg className="w-10 h-10 animate-spin text-primary" viewBox="0 0 24 24" fill="none">
@@ -80,7 +86,7 @@ export default function SettingsPage() {
 
         {!loading && (
           <>
-            {/*//* AI Preferences */}
+            {/*//* STEP-4: AI Preferences */}
             <AIPreferences
               voice={voice}
               autoSave={autoSave}
@@ -88,11 +94,11 @@ export default function SettingsPage() {
               onAutoSaveChange={setAutoSave}
             />
 
-            {/*//* Save Preferences CTA */}
+            {/*//* STEP-5: Save Preferences CTA + feedback */}
             <div className="space-y-3">
               {success && (
                 <div className="p-3 rounded-xl bg-[#48e5d0]/10 border border-[#48e5d0]/30 text-[#48e5d0] text-sm text-center">
-                  {success}
+                  ✓ {success}
                 </div>
               )}
               {error && (
@@ -111,23 +117,22 @@ export default function SettingsPage() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                     </svg>
-                    Saving...
+                    Saving Preferences...
                   </>
                 ) : 'Save Preferences'}
               </button>
             </div>
 
-            {/*//* Appearance */}
+            {/*//* STEP-6: Appearance */}
             <AppearanceSection theme={theme} onThemeChange={setTheme} />
 
-            {/*//* Security */}
+            {/*/* STEP-7: Security */}
             <SecuritySection />
 
-            {/*//* Danger Zone */}
+            {/*//* STEP-8: Danger Zone */}
             <DangerZone />
           </>
         )}
-
       </div>
     </DashboardLayout>
   )

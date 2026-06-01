@@ -11,7 +11,7 @@ const interviewRouter=require('./features/interview/interview.routes')
 const groqRouter=require('./features/groq/groq.routes')
 const analyticsRouter=require('./features/analytics/analytics.routes')
 const resourceRouter=require('./features/resources/resources.routes')
-
+const settingsRouter=require('./features/settings/settings.routes')
 const app=express()
 
 app.use(express.json())
@@ -28,6 +28,7 @@ app.use('/api/interview', interviewRouter)
 app.use('/api/groq', groqRouter)
 app.use('/api/analytics', analyticsRouter)
 app.use('/api/resources', resourceRouter)
+app.use('/api/settings', settingsRouter)
 
 const PORT=process.env.PORT
 const startServer=async()=>{
