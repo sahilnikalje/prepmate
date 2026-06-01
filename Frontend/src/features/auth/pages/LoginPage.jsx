@@ -12,7 +12,7 @@ function LoginPage() {
       {/*//* left panel */}
       <AuthLayout/>
 
-      {/*//* right panel */}w-full md:w-1/2 bg
+      {/*//* right panel */}
       <section className="w-full md:w-1/2 bg-surface-container-low flex items-center justify-center p-6 md:p-10 overflow-y-auto">
         <div className='w-full max-w-md'>
            {/*//* Mobile logo */}
