@@ -50,6 +50,10 @@ function InterviewPage() {
   const [showCompletion, setShowCompletion] = useState(false);
   const [redirectCountdown, setRedirectCountdown] = useState(5);
 
+  // Warning banner — only show when user leaves the window or switches tab
+  const [showWarning, setShowWarning] = useState(false);
+  const warningTimerRef = useRef(null);
+
   // ── Refs: prevent race conditions ─────────────────────────────────────────
   // Prevent submitting the same answer twice
   const isSubmittingRef = useRef(false);
@@ -57,6 +61,35 @@ function InterviewPage() {
   const lastAskedQuestionRef = useRef("");
   // True while transitioning between questions — blocks new submissions
   const isTransitioningRef = useRef(false);
+
+  // ── Warning: show when user leaves window or switches tab ─────────────────
+  useEffect(() => {
+    const triggerWarning = () => {
+      setShowWarning(true);
+      if (warningTimerRef.current) clearTimeout(warningTimerRef.current);
+      warningTimerRef.current = setTimeout(() => setShowWarning(false), 3000);
+    };
+
+    const handleMouseLeave = (e) => {
+      // Only trigger if mouse truly left the viewport
+      if (e.clientY <= 0 || e.clientX <= 0 || e.clientX >= window.innerWidth || e.clientY >= window.innerHeight) {
+        triggerWarning();
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) triggerWarning();
+    };
+
+    document.addEventListener("mouseleave", handleMouseLeave);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      if (warningTimerRef.current) clearTimeout(warningTimerRef.current);
+    };
+  }, []);
 
   // ── Speech hook ────────────────────────────────────────────────────────────
   const {
@@ -407,23 +440,29 @@ function InterviewPage() {
         total={questions.length}
       />
 
-      {/* Warning banner */}
-      <div className="flex justify-center px-8 mb-2 flex-shrink-0">
-        <div className="bg-error-container/20 backdrop-blur-xl px-6 py-2 rounded-xl border border-error/20 flex items-center gap-3">
+      {/* ── Warning banner — fixed overlay, only when user leaves window/tab ── */}
+      {showWarning && (
+        <div
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 px-6 py-3 rounded-2xl border border-error/40 backdrop-blur-xl animate-fade-in"
+          style={{
+            background: 'rgba(255,60,60,0.18)',
+            boxShadow: '0 0 0 1px rgba(255,60,60,0.12), 0 8px 32px rgba(255,60,60,0.18)',
+          }}
+        >
           <span
-            className="material-symbols-outlined text-error text-sm"
-            style={{ fontVariationSettings: "'FILL'1" }}
+            className="material-symbols-outlined text-error text-lg"
+            style={{ fontVariationSettings: "'FILL' 1" }}
           >
             warning
           </span>
-          <span className="font-headline font-bold text-[10px] tracking-widest text-error uppercase">
+          <span className="font-headline font-bold text-xs tracking-widest text-error uppercase">
             Please stay on this screen to maintain session integrity.
           </span>
         </div>
-      </div>
+      )}
 
       {/* Main content: Camera + subtitle + actions */}
-      <main className="flex-1 flex flex-col items-center justify-center px-8 relative min-h-0">
+      <main className="flex-1 flex flex-col items-center justify-center px-8 gap-3 relative min-h-0 overflow-hidden pb-2">
         <CameraView
           question={currentQ}
           transcript={transcript}
@@ -435,7 +474,7 @@ function InterviewPage() {
         {!isListening && !isSpeaking && !isEvaluating && transcript && !isSubmittingRef.current && (
           <div
             onClick={handleSubmitAnswer}
-            className="mt-4 px-8 py-3 bg-gradient-to-r from-primary to-secondary text-on-primary-fixed font-bold rounded-full text-sm shadow-[0_0_20px_rgba(163,166,255,0.3)] hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2 flex-shrink-0 cursor-pointer select-none"
+            className="px-8 py-3 bg-gradient-to-r from-primary to-secondary text-on-primary-fixed font-bold rounded-full text-sm shadow-[0_0_20px_rgba(163,166,255,0.3)] hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2 flex-shrink-0 cursor-pointer select-none"
           >
             <span className="material-symbols-outlined text-sm">check_circle</span>
             Submit Answer
@@ -444,7 +483,7 @@ function InterviewPage() {
 
         {/* Evaluating state */}
         {isEvaluating && (
-          <div className="mt-4 flex items-center gap-3 text-secondary flex-shrink-0">
+          <div className="flex items-center gap-3 text-secondary flex-shrink-0">
             <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />

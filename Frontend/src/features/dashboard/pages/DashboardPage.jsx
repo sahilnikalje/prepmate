@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import StatsCard from '../components/StatsCard';
 import InterviewList from '../components/InterviewList';
 import dashboardService from '../services/dashboardService';
@@ -48,6 +49,7 @@ const statsConfig = [
 function DashboardPage() {
  //todo STEP-2: State for real data, loading, and error
     const { user } = useUser()
+    const navigate = useNavigate()
     const[stats, setStats]=useState(null)
     const[recentInterviews, setRecentInterviews]=useState([])
     const[loading, setLoading]=useState(true)
@@ -113,6 +115,7 @@ function DashboardPage() {
 
         {/*//* Start Interview button */}
         <button
+          onClick={() => navigate('/practice')}
           className='px-8 py-4 bg-gradient-to-r from-primary to-secondary text-on-primary-fixed font-bold rounded-xl shadow-[0_0_20px_rgba(163,166,255,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2 self-start md:self-auto'
         >
             <span className='material-symbols-outlined'
