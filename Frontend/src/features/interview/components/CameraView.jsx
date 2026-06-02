@@ -34,94 +34,154 @@ function CameraView({ question, transcript, isListening, isSpeaking }) {
     }
   }, [])
 
-  // What to show in the subtitle bar
-  const subtitleText = isListening && transcript ? transcript : displayedQuestion
+  // What to show in the subtitle bar (transcript shown separately in InterviewPage)
   const isShowingTranscript = isListening && transcript
 
   return (
-    <div className='w-full max-w-3xl mx-auto flex flex-col gap-4 flex-shrink-0'>
+    <div className='w-full max-w-4xl mx-auto flex flex-col gap-3 flex-shrink-0'>
 
-      {/* ── Camera box ──────────────────────────────────────────────────── */}
-      <div
-        className='relative w-full overflow-hidden bg-surface-container-low shadow-2xl'
-        style={{
-          aspectRatio: '16/9',
-          maxHeight: '42vh',
-          borderRadius: '1.25rem',
-          border: '1.5px solid rgba(163,166,255,0.12)',
-          boxShadow: '0 0 0 1px rgba(163,166,255,0.07), 0 8px 48px 0 rgba(0,0,0,0.45)',
-        }}
-      >
-        {/* Webcam feed */}
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          playsInline
-          className='w-full h-full object-cover scale-x-[-1]'
-        />
+      {/* ── Two equal square sections side by side ──────────────────────── */}
+      <div className='flex gap-4 w-full'>
 
-        {/* Soft vignette overlay for immersion */}
+        {/* ── LEFT SQUARE: AI Question / Subtitles ──────────────────────── */}
         <div
-          className='absolute inset-0 pointer-events-none'
+          className='flex-1 relative overflow-hidden bg-surface-container-low flex flex-col items-center justify-center'
           style={{
-            background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.38) 100%)',
+            aspectRatio: '1/1',
+            maxHeight: '38vh',
+            borderRadius: '1.25rem',
+            border: '1.5px solid rgba(163,166,255,0.15)',
+            boxShadow: '0 0 0 1px rgba(163,166,255,0.07), 0 8px 48px 0 rgba(0,0,0,0.45)',
+            background: 'linear-gradient(135deg, rgba(163,166,255,0.06) 0%, rgba(10,10,30,0.95) 100%)',
           }}
-        />
+        >
+          {/* Atmospheric glow */}
+          <div
+            className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full pointer-events-none'
+            style={{ background: 'radial-gradient(circle, rgba(163,166,255,0.12) 0%, transparent 70%)' }}
+          />
 
-        {/* Bottom gradient for text legibility */}
-        <div className='absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-background/50 to-transparent pointer-events-none' />
+          {/* Corner accents */}
+          <div className="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-primary/35 rounded-tl-lg" />
+          <div className="absolute top-3 right-3 w-5 h-5 border-t-2 border-r-2 border-primary/35 rounded-tr-lg" />
+          <div className="absolute bottom-3 left-3 w-5 h-5 border-b-2 border-l-2 border-primary/20 rounded-bl-lg" />
+          <div className="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-primary/20 rounded-br-lg" />
 
-        {/* Corner accents — refined */}
-        <div className="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-primary/35 rounded-tl-lg" />
-        <div className="absolute top-3 right-3 w-5 h-5 border-t-2 border-r-2 border-primary/35 rounded-tr-lg" />
-        <div className="absolute bottom-3 left-3 w-5 h-5 border-b-2 border-l-2 border-primary/20 rounded-bl-lg" />
-        <div className="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-primary/20 rounded-br-lg" />
+          {/* AI label badge */}
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full">
+            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            <span className="text-[9px] font-bold tracking-[0.15em] text-white/80 uppercase">AI Question</span>
+          </div>
 
-        {/* REC badge */}
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full">
-          <div className="w-1.5 h-1.5 rounded-full bg-error animate-pulse" />
-          <span className="text-[9px] font-bold tracking-[0.15em] text-white/80 uppercase">Live</span>
+          {/* Status: AI speaking indicator */}
+          {isSpeaking && !isListening && (
+            <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-secondary/20 backdrop-blur-md px-2 py-1 rounded-full">
+              <span className='material-symbols-outlined text-secondary text-xs animate-pulse'>volume_up</span>
+              <span className='font-headline font-extrabold text-[8px] tracking-widest text-secondary uppercase'>Speaking</span>
+            </div>
+          )}
+
+          {/* Waveform animation when AI is speaking */}
+          <div className='absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1 items-end h-6'>
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className={`w-1 rounded-full ${isSpeaking ? 'bg-primary/60' : 'bg-primary/20'}`}
+                style={{
+                  height: isSpeaking ? `${Math.random() * 12 + 8}px` : '4px',
+                  animation: isSpeaking ? `bounce 0.6s ${i * 0.1}s infinite alternate` : 'none',
+                  transition: 'height 0.3s',
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Question text */}
+          <div className='relative z-10 px-6 text-center flex flex-col items-center gap-3'>
+            <p
+              className='font-headline text-base font-semibold leading-relaxed text-on-surface'
+              style={{ textShadow: '0 2px 12px rgba(163,166,255,0.18)' }}
+            >
+              "{displayedQuestion}"
+            </p>
+          </div>
+        </div>
+
+        {/* ── RIGHT SQUARE: User Camera Feed ────────────────────────────── */}
+        <div
+          className='flex-1 relative overflow-hidden bg-surface-container-low'
+          style={{
+            aspectRatio: '1/1',
+            maxHeight: '38vh',
+            borderRadius: '1.25rem',
+            border: '1.5px solid rgba(163,166,255,0.12)',
+            boxShadow: '0 0 0 1px rgba(163,166,255,0.07), 0 8px 48px 0 rgba(0,0,0,0.45)',
+          }}
+        >
+          {/* Webcam feed */}
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            playsInline
+            className='w-full h-full object-cover scale-x-[-1]'
+          />
+
+          {/* Soft vignette overlay for immersion */}
+          <div
+            className='absolute inset-0 pointer-events-none'
+            style={{
+              background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.38) 100%)',
+            }}
+          />
+
+          {/* Bottom gradient for text legibility */}
+          <div className='absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background/50 to-transparent pointer-events-none' />
+
+          {/* Corner accents */}
+          <div className="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-primary/35 rounded-tl-lg" />
+          <div className="absolute top-3 right-3 w-5 h-5 border-t-2 border-r-2 border-primary/35 rounded-tr-lg" />
+          <div className="absolute bottom-3 left-3 w-5 h-5 border-b-2 border-l-2 border-primary/20 rounded-bl-lg" />
+          <div className="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-primary/20 rounded-br-lg" />
+
+          {/* REC badge */}
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full">
+            <div className="w-1.5 h-1.5 rounded-full bg-error animate-pulse" />
+            <span className="text-[9px] font-bold tracking-[0.15em] text-white/80 uppercase">Live</span>
+          </div>
+
+          {/* Listening indicator */}
+          {isListening && (
+            <div className='absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full'>
+              <div className='flex gap-0.5 items-end h-4'>
+                <div className="w-1 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
+                <div className="w-1 h-4 bg-secondary rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
+                <div className="w-1 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.3s" }} />
+              </div>
+              <span className='font-headline font-extrabold text-[9px] tracking-[0.2em] text-primary uppercase'>
+                Listening
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* ── Subtitle / Question box ─────────────────────────────────────── */}
+      {/* ── Transcript / Answer area (unchanged position) ───────────────── */}
       <div className='w-full'>
         <div
-          className='bg-surface-variant/40 backdrop-blur-3xl px-6 py-4 rounded-2xl inner-glow w-full text-center'
-          style={{ minHeight: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          className='bg-surface-variant/40 backdrop-blur-3xl px-6 py-3 rounded-2xl inner-glow w-full text-center'
+          style={{ minHeight: '54px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
           <p
-            className={`font-headline text-base font-medium leading-relaxed transition-colors duration-300 ${isShowingTranscript ? 'text-tertiary-dim' : 'text-on-surface'
-              }`}
+            className={`font-headline text-base font-medium leading-relaxed transition-colors duration-300 ${
+              isShowingTranscript ? 'text-tertiary-dim' : 'text-on-surface/50'
+            }`}
           >
-            "{subtitleText}"
+            {isShowingTranscript
+              ? `"${transcript}"`
+              : <span className='text-on-surface-variant text-sm italic'>Your answer will appear here as you speak...</span>
+            }
           </p>
-        </div>
-
-        {/* Status indicators */}
-        <div className='flex items-center justify-center gap-4 mt-2 h-6'>
-          {isListening && (
-            <div className='flex items-center justify-center gap-2'>
-              <div className='flex gap-1'>
-                <div className="w-1 h-3 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.1s" }} />
-                <div className="w-1 h-5 bg-secondary rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
-                <div className="w-1 h-4 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0.3s" }} />
-              </div>
-              <span className='font-headline font-extrabold text-xs tracking-[0.2em] text-primary italic'>
-                LISTENING...
-              </span>
-            </div>
-          )}
-
-          {isSpeaking && !isListening && (
-            <div className='flex items-center justify-center gap-2'>
-              <span className='material-symbols-outlined text-secondary text-sm animate-pulse'>volume_up</span>
-              <span className='font-headline font-extrabold text-xs tracking-[0.2em] text-secondary italic'>
-                AI SPEAKING...
-              </span>
-            </div>
-          )}
         </div>
       </div>
 
