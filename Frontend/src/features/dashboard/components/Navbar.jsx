@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { useUser } from '../../../context/UserContext'
 
 function Navbar() {
-  const { user }  = useUser()
-  const navigate  = useNavigate()
-  const initial   = user?.name ? user.name.charAt(0).toUpperCase() : '?'
+  const { user } = useUser()
+  const navigate = useNavigate()
+  const initial = user?.name ? user.name.charAt(0).toUpperCase() : '?'
 
   return (
     <header className='w-full h-16 sticky top-0 z-40 bg-background/80 backdrop-blur-xl flex justify-between items-center px-8 border-b border-white/5'>
@@ -17,13 +17,14 @@ function Navbar() {
             search
           </span>
           <input
-            type='text'
-            autoComplete="off"
+            type='search'
+            autoComplete="new-password"
             autoCorrect="off"
             autoCapitalize="off"
             spellCheck="false"
             placeholder='Search...'
-            className="w-full bg-surface-container-highest border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50 transition-all outline-none text-on-surface placeholder:text-outline"
+            className="w-full bg-surface-container-highest border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50 transition-all outline-none text-on-surface placeholder:text-on-surface-variant/60 [&::-webkit-search-cancel-button]:hidden"
+            style={{ WebkitBoxShadow: '0 0 0px 1000px #192540 inset', WebkitTextFillColor: '#dee5ff' }}
           />
         </div>
       </div>
