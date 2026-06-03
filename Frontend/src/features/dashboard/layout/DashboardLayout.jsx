@@ -1,66 +1,66 @@
 import React, { Children } from 'react'
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import authService from '../../auth/services/authService';
 import { useUser } from '../../../context/UserContext'
 
-function DashboardLayout({children}) {
-    const navigate=useNavigate()
-    const { clearUser } = useUser()
- //todo STEP-1: Real logout — calls backend to clear the cookie
-   const handleLogout=async()=>{
-    try{
+function DashboardLayout({ children }) {
+  const navigate = useNavigate()
+  const { clearUser } = useUser()
+  //todo STEP-1: Real logout — calls backend to clear the cookie
+  const handleLogout = async () => {
+    try {
       await authService.logout()
       clearUser()
     }
-    catch(err){
+    catch (err) {
       console.error('Logout error: ', err);
     }
-    finally{
- //todo STEP-2: Always redirect to login even if API fails
-    navigate('/login')
+    finally {
+      //todo STEP-2: Always redirect to login even if API fails
+      navigate('/login')
     }
-   }
-  return ( 
+  }
+  return (
     <div className='bg-background text-on-surface min-h-screen flex overflow-hidden'>
-        {/*//* Sidebar — fixed on left */}
-        <Sidebar onLogout={handleLogout}/>
+      {/*//* Sidebar — fixed on left */}
+      <Sidebar onLogout={handleLogout} />
 
-        {/*//* Main area — offset by sidebar width on md+ */}
-         <main className='flex-1 ml-0 md:ml-64 h-screen overflow-y-auto scroll-smooth'>
-            {/*//* Sticky top navbar */}
-            <Navbar/>
+      {/*//* Main area — offset by sidebar width on md+ */}
+      <main className='flex-1 ml-0 md:ml-64 h-screen overflow-y-auto scroll-smooth'>
+        {/*//* Sticky top navbar */}
+        <Navbar />
 
-            {/*//* Sticky top navbar */}
-            <div className='max-w-6xl mx-auto px-6 py-12 md:px-12'>
-                {children}
-            </div>
+        {/*//* Sticky top navbar */}
+        <div className='max-w-6xl mx-auto px-6 py-12 md:px-12'>
+          {children}
+        </div>
 
-            {/*//* Mobile bottom padding so content isn't hidden behind mobile nav */}
-            <footer className='h-24 md:hidden'/>
-         </main>
+        {/*//* Mobile bottom padding so content isn't hidden behind mobile nav */}
+        <footer className='h-24 md:hidden' />
+      </main>
 
-         {/*//* Mobile bottom nav bar */}
-         <nav className='md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#060e20]/90 backdrop-blur-xl border-t border-white/5 flex items-center justify-around px-4 z-50'>
-           {
-            [
-             { icon: "dashboard",  label: "Dashboard", path: "/dashboard"  },
-             { icon: "psychology", label: "Practice",  path: "/practice"   },
-             { icon: "insights",   label: "Analytics", path: "/analytics"  },
-             { icon: "menu_book",  label: "Resources", path: "/resources"  },
-           ].map((item)=>(
-             <button
+      {/*//* Mobile bottom nav bar */}
+      <nav className='md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#060e20]/90 backdrop-blur-xl border-t border-white/5 flex items-center justify-around px-4 z-50'>
+        {
+          [
+            { icon: "dashboard", label: "Dashboard", path: "/dashboard" },
+            { icon: "psychology", label: "Practice", path: "/practice" },
+            { icon: "insights", label: "Analytics", path: "/analytics" },
+            { icon: "menu_book", label: "Resources", path: "/resources" },
+          ].map((item) => (
+            <button
               key={item.label}
-              onClick={()=>navigate(item.path)}
+              onClick={() => navigate(item.path)}
               className='flex flex-col items-center gap-1 text-on-surface-variant'
-             >
-                <span className='material-symbols-outlined text-2xl'>{item.icon}</span>
-                <span className='text-[10px] font-medium'>{item.label}</span>
-             </button>
-           ))
-          }
-         </nav>
+            >
+              <span className='material-symbols-outlined text-2xl'>{item.icon}</span>
+              <span className='text-[10px] font-medium'>{item.label}</span>
+            </button>
+          ))
+        }
+      </nav>
     </div>
   )
 }

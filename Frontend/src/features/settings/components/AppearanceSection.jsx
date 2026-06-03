@@ -2,8 +2,8 @@
 
 const themes = [
   {
-    id:      'dark',
-    label:   'Obsidian Deep',
+    id: 'dark',
+    label: 'Obsidian Deep',
     preview: (
       <div className="w-full h-20 rounded-xl bg-[#060e20] flex flex-col p-2 gap-1.5">
         <div className="flex gap-1">
@@ -19,8 +19,8 @@ const themes = [
     ),
   },
   {
-    id:      'light',
-    label:   'Luminous Light',
+    id: 'light',
+    label: 'Luminous Light',
     preview: (
       <div className="w-full h-20 rounded-xl bg-[#f0f4ff] flex flex-col p-2 gap-1.5">
         <div className="flex gap-1">
@@ -58,11 +58,10 @@ export default function AppearanceSection({ theme, onThemeChange }) {
             <button
               key={t.id}
               onClick={() => onThemeChange(t.id)}
-              className={`relative p-4 rounded-2xl border text-left transition-all duration-300 ${
-                isActive
+              className={`relative p-4 rounded-2xl border text-left transition-all duration-300 ${isActive
                   ? 'border-primary shadow-[0_0_20px_rgba(163,166,255,0.15)]'
                   : 'border-white/5 bg-surface-container-high hover:border-white/10'
-              }`}
+                }`}
             >
               {/* Preview */}
               {t.preview}

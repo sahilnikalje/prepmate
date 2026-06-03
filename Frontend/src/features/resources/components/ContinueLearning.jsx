@@ -14,7 +14,7 @@ function ContinueLearning({item}) {
          <div className='h-1 bg-white/10 rounded-full overflow-hidden'>
            <div
              className={`h-full ${item.barColor} rounded-full transition-all duration-700`}
-             style={{width:`S{item.progress}%`}}
+             style={{width:`${item.progress}%`}}
            />
          </div>
         
